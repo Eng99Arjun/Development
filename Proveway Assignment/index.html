@@ -1,331 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="description" content="BOGO Offer Webpage with interactive options for 1-unit, 2-unit, and 3-unit purchase choices.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BOGO Offer</title>
-  <!-- <link rel="stylesheet" href="styles.css"> -->
-  <style>
-    /* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f2f2f2;
-  color: #333;
-  line-height: 1.5;
-}
-
-/* Container Styling */
-.container {
-  width: 462px;
-  height: 603px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Header Styling */
-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-header h1 {
-  font-size: 2rem;
-  color: #FF6B82;
-}
-
-/* Form and Fieldset Styling */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-fieldset.option {
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  padding: 1rem;
-}
-
-fieldset.option legend {
-  font-size: 1.2rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-fieldset.option input[type="radio"] {
-  /* Accent color for radio buttons */
-  accent-color: #FF6B82;
-}
-
-/* Price Display Styling */
-.option-price {
-  margin-top: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.option-price span {
-  font-weight: bold;
-  color: #000;
-}
-
-.option-price del {
-  margin-left: 1rem;
-  color: #999;
-}
-
-/* Highlighting Most Popular Option */
-.most-popular {
-  border-color: #FF6B82;
-}
-
-/* Extra Selection Options for Two-Unit Purchase */
-.selection {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #ddd;
-}
-
-.selection .item {
-  display: flex;
-  flex-direction: column;
-}
-
-.selection .item label {
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.selection .item select {
-  padding: 0.4rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-/* Order Summary Styling */
-.order-summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #ddd;
-  padding-top: 1rem;
-  font-size: 1.1rem;
-}
-
-.order-summary .delivery {
-  font-style: italic;
-  color: #5cb85c;
-}
-
-.order-summary .total {
-  font-weight: bold;
-}
-
-/* Button Styling */
-button#add-to-cart {
-  padding: 1rem;
-  background-color: #FF6B82;
-  border: none;
-  border-radius: 5px;
-  color: #fff;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button#add-to-cart:hover {
-  background-color: #FF6B82;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  .selection {
-    flex-direction: column;
-  }
-}
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css?family=Inter:600&display=swap" rel="stylesheet">
 </head>
 <body>
-
-        <script>
-            // Ensure the DOM is fully loaded before executing the script.
-    document.addEventListener('DOMContentLoaded', () => {
-    // Cache the DOM elements for performance and easy access.
-    const radioButtons = document.querySelectorAll('input[name="units"]');
-    const totalPriceEl = document.getElementById('total-price');
-    const addToCartBtn = document.getElementById('add-to-cart');
-
-    /**
-     * Updates the total price displayed based on the selected unit option.
-     */
-    function updatePrice() {
-        let price = 0;
-        const selected = document.querySelector('input[name="units"]:checked');
-        if (selected) {
-        // Determine the price based on the radio button's value.
-        switch (selected.value) {
-            case "1":
-            price = 10.00;
-            break;
-            case "2":
-            price = 18.00;
-            break;
-            case "3":
-            price = 24.00;
-            break;
-            default:
-            price = 0;
-        }
-        }
-        // Format and display the total price.
-        totalPriceEl.textContent = `$${price.toFixed(2)} USD`;
-    }
-
-    /**
-     * Toggles visibility of additional selection options (size and colour)
-     * for the 2-unit purchase option.
-     */
-    function updateSelectionVisibility() {
-        const twoUnitRadio = document.getElementById('two-unit');
-        // Get the closest parent fieldset which contains the .selection div.
-        const twoUnitFieldset = twoUnitRadio.closest('.option');
-        const selectionContainer = twoUnitFieldset.querySelector('.selection');
-        // Show the extra options only when the two-unit option is selected.
-        if (twoUnitRadio.checked) {
-        selectionContainer.style.display = 'flex';
-        } else {
-        selectionContainer.style.display = 'none';
-        }
-    }
-
-    // Attach change event listeners to all radio buttons.
-    radioButtons.forEach(radio => {
-        radio.addEventListener('change', () => {
-        updatePrice();
-        updateSelectionVisibility();
-        });
-    });
-
-    // Perform initial update once the page has loaded.
-    updatePrice();
-    updateSelectionVisibility();
-
-    // Handle click event on the "Add to Cart" button.
-    addToCartBtn.addEventListener('click', () => {
-        // Additional form validations or data collection can be added here.
-        alert("Items added to cart. Thank you for your purchase!");
-    });
-    });
-        </script>
-
-  <!-- Main Container -->
   <div class="container">
-    <header>
-      <h1>YAY! It's BOGO</h1>
-    </header>
-    
-    <!-- BOGO Offer Form -->
-    <form id="bogo-form">
-      
-      <!-- Option 1: Single Unit Purchase -->
-      <fieldset class="option">
-        <legend>
-          <input type="radio" id="one-unit" name="units" value="1">
-          <label for="one-unit">1 Unit <span class="discount">10% Off</span></label>
-        </legend>
-        <div class="option-price">
-          <span>$10.00 USD</span> <del>$24.00 USD</del>
-        </div>
-      </fieldset>
-      
-      <!-- Option 2: Two Unit Purchase (Most Popular) -->
-      <fieldset class="option most-popular">
-        <legend>
-          <input type="radio" id="two-unit" name="units" value="2" checked>
-          <label for="two-unit">2 Unit <span class="discount">20% Off</span></label>
-        </legend>
-        <div class="option-price">
-          <span>$18.00 USD</span> <del>$24.00 USD</del>
-        </div>
-        <!-- Additional selectors shown only for the 2-unit option -->
-        <div class="selection">
-          <div class="item">
-            <label for="size1">Size</label>
-            <select id="size1" name="size1">
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-            </select>
-          </div>
-          <div class="item">
-            <label for="color1">Colour</label>
-            <select id="color1" name="color1">
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Colour">Colour</option>
-            </select>
-          </div>
-          <div class="item">
-            <label for="size2">Size</label>
-            <select id="size2" name="size2">
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-            </select>
-          </div>
-          <div class="item">
-            <label for="color2">Colour</label>
-            <select id="color2" name="color2">
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Colour">Colour</option>
-            </select>
-          </div>
-        </div>
-      </fieldset>
-      
-      <!-- Option 3: Three Unit Purchase -->
-      <fieldset class="option">
-        <legend>
-          <input type="radio" id="three-unit" name="units" value="3">
-          <label for="three-unit">3 Unit <span class="discount">30% Off</span></label>
-        </legend>
-        <div class="option-price">
-          <span>$24.00 USD</span> <del>$24.00 USD</del>
-        </div>
-      </fieldset>
-      
-      <!-- Order Summary and Add to Cart -->
-      <div class="order-summary">
-        <div class="delivery">
-          <span>Free Delivery</span>
-        </div>
-        <div class="total">
-          <span>Total: </span><span id="total-price">$18.00 USD</span>
-        </div>
-        <button type="button" id="add-to-cart">Add to Cart</button>
-      </div>
-      
-    </form>
-  </div>
+     
+    <!-- Title -->
+
+    <div class="title">
+      <div class="rule"></div>
+      <h2>YAY! It's BOGO</h2>
+      <div class="rule"></div>
+    </div>
+
+    <!-- Card container -->
+    <div class="card-container">
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; justify-content: space-between; gap: 1em;">
+            <div>
+              <input type="radio" id="card1" name="fav_language" value="">
+            </div>
+            <div>
+              <label 
+                style="font-family: Inter; font-weight: 600; font-size: 14px; line-height: 100%; letter-spacing: 0%;">
+                1 Unit
+              </label>
+              10% Off
   
+              <div style="font-family: Inter; font-weight: 500; font-size: 14.46px; line-height: 100%; letter-spacing: 0%;">
+                Standard Price
+              </div>
+            </div>
+          </div>
+  
+          <div>
+            <div>
+              $10.00 USD
+            </div>
+            <div style="font-family: Inter; font-weight: 400; font-size: 10px; line-height: 100%; letter-spacing: 0%; text-decoration: line-through;">
+              $24.00 USD
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+          
+    
+    
+    
+    
+    
+    <!-- <p class="powered">© Powered by Pumper</p> -->
+
+
+
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
